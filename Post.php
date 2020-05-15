@@ -292,13 +292,15 @@ trait Post
 			// let's get the keys
 			if (count($matches) > 0 && count($matches[0]) > 0)
 			{
-				$keys = array_each(function($key){
-					$key = trim($key);
+				$keys = $matches[2];
+                
+                foreach ($keys as $index => $key) :
+                    $key = trim($key);
 					$key = preg_replace('/^["]/','',$key);
 					$key = preg_replace('/["]$/','',$key);
-					$key = preg_replace('/[\s]/','',$key);
-					return $key;
-				}, $matches[2]);
+                    $key = preg_replace('/[\s]/','',$key);
+                    $keys[$index] = $key;
+                endforeach;
 
 				$input = preg_replace("/(Content-Disposition: form-data; name=)+(.*)/m", $postsize, $input);
 
@@ -307,14 +309,16 @@ trait Post
 				// now let's get key value
 				$inputArr = explode($postsize, $input);
 
-                $values = array_each(function($val)
-                {
+                // @var array $values
+                $values = [];
+                
+                foreach ($inputArr as $index => $val) :
                     $val = preg_replace('/[\n]/','',$val);
                     
-                    if (preg_match('/[\S]/', $val)) return trim($val);
-                    
-				}, $inputArr);
+                    if (preg_match('/[\S]/', $val)) $values[$index] = trim($val);
 
+                endforeach;
+                
 				// now combine the key to the values
 				$post = [];
 
