@@ -10,6 +10,9 @@
 			// add callback
 			if (isset($vars['callback'])) $callbacks[] = $vars['callback'] . '.call();';
 			
+			// add export
+			if (isset($vars['export'])) $callbacks[] = '(' . $vars['export'] . ')();';
+			
 			// merge data 
 			$data = array_merge($data, $vars);
 			
