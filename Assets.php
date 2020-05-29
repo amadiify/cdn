@@ -19,7 +19,7 @@
 		endforeach;
 		
 		// add callbacks
-		if (count($callbacks) > 0) self::$jsScripts[] = '<script type="text/deffered">'.implode(' ', $callbacks).'</script>';
+		if (count($callbacks) > 0) self::$jsScripts[] = '<script type="text/deffered">window.onload = function(){ '.implode(' ', $callbacks).' };</script>';
 		
 		// return string 
 		return '<script type="text/deffered">let phpvars = '.json_encode($data).';</script>';
