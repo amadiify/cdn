@@ -1,0 +1,224 @@
+<!-- section reservation -->
+<section class="section__reservation">
+	<div class="container">
+	  <div class="row">
+		<div class="col-sm-5 col-sm-push-7 col-md-4 col-md-push-8">
+			<div class="booking__details-body">
+				<p class="subheading">Booking details</p>
+				<h2 class="section__heading">Selected room</h2>
+				<figure class="room__details">	
+					{$image = $data->booking['image'];}
+					<img $src="$image" class="img-responsive" alt="...">
+					<figcaption>
+						<h3>{$roomType} room</h3>
+						<p class="room__desc">This is a {$roomType} room, and it is available to you for {$data->booking['nights']} or more nights. Please proceed to make payment via card or upon arrival.</p>
+					</figcaption>
+				</figure> <!-- / .room__details -->
+				<ul class="details-info">
+			<li>
+			  <label>Check in</label>
+			  <p>{$data->post['reservation__check_in']}</p>
+			</li>
+			<li>
+			  <label>Check out</label>
+			  <p>{$data->post['reservation__check_out']}</p>
+			</li>
+			<li>
+			  <label>Adults</label>
+			  <p>{$data->post['reservation__adults']} Person</p>
+			</li>
+			<li>
+			  <label>Children</label>
+			  <p>{$data->post['reservation__children'] > 1 ? $data->post['reservation__children'] . ' Children' : 'None'}</p>
+			</li>
+			<li>
+			  <label>Nights</label>
+			  <p>{$data->booking['nights'] > 1 ? $data->booking['nights'] . ' Nights' : '1 Night'}</p>
+			</li>
+			<li>
+			  <label>Deposit</label>
+			  <p>₦{$data->booking['deposit']}</p>
+			</li>
+			<li class="total-price">
+			  <label>Total price</label>
+			  <p>₦{$data->booking['price']}</p>
+			</li>
+		</ul>
+			  </div> <!-- .booking__details-body -->
+			  <div class="info__body">
+						<p class="info__title">Information</p>
+						<ul class="info__content">
+			<li>
+			  <p class="info-text">If you have some questions with booking please contact us.</p>
+			</li>
+			  <li>
+				<i class="icon ion-android-pin"></i>
+				<div class="info-content">
+				  <div class="title">Address</div>
+				  <div class="description">@info('address');</div>
+				</div>
+			  </li>
+			  <li>
+				<i class="icon ion-android-call"></i>
+				<div class="info-content">
+				  <div class="title">Phone / Fax</div>
+				  <div class="description">@info('phone');</div>
+				</div>
+			  </li>
+			  <li>
+				<i class="icon ion-android-mail"></i>
+				<div class="info-content">
+				  <div class="title">E-mail</div>
+				  <div class="description">@info('email');</div>
+				</div>
+			  </li>
+			</ul> <!-- .info__content -->
+			  </div> <!-- / .info__body -->
+		</div>
+		@isAuth
+		<div class="col-sm-7 col-sm-pull-5 col-md-8 col-md-pull-4">
+			<div class="reservation__form-body">
+				<p class="subheading">Booking form</p>
+				<h2 class="section__heading">Personal info</h2>
+				<p class="section__subheading">We would need some of your basic information. You should change the firstname, lastname, phone if you are booking for someone.</p>
+
+				<!-- Alert message -->
+				@alert;
+
+				<form id="reservation-form_sendemail" class="reservation__form" data-animate-in="animateUp" action="" method="POST">
+					
+					@method('put');
+					@csrf;
+
+					<input type="hidden" name="reservation__check_in" value="{$data->post['reservation__check_in']}"/>
+					<input type="hidden" name="reservation__check_out" value="{$data->post['reservation__check_out']}"/>
+					<input type="hidden" name="reservation__adults" value="{$data->post['reservation__adults']}"/>
+					<input type="hidden" name="reservation__children" value="{$data->post['reservation__children']}"/>
+					<input type="hidden" name="nights" value="{$data->booking['nights']}"/>
+					<input type="hidden" name="price" value="{$data->booking['price']}"/>
+					<input type="hidden" name="room" value="{$roomType}"/>
+
+					<div class="col-sm-12 col-md-6">
+						<div class="form-group">
+						<label for="first-name" class="sr-only">First name</label>
+						<input type="text" name="firstname" class="form-control" id="first-name" placeholder="First Name" required value="{app('user.auth')->get('firstname')}">
+						@input('firstname');
+						</div>
+					</div>
+					<div class="col-sm-12 col-md-6">
+						<div class="form-group">
+						<label for="last-name" class="sr-only">Last name</label>
+						<input type="text" name="lastname" class="form-control" id="last-name" placeholder="Last Name" required value="{app('user.auth')->get('lastname')}">
+						@input('lastname');
+						</div>
+					</div>
+					<div class="col-sm-12 col-md-6">
+						<div class="form-group">
+						<label for="phone" class="sr-only">Phone</label>
+						<input type="tel" name="phone" class="form-control" id="phone" placeholder="Phone" required>
+						@input('phone');
+						</div>
+					</div>
+					<div class="col-sm-12 col-md-6">
+						<div class="form-group">
+						<label for="address-line1" class="sr-only">Address line 1</label>
+						<input type="text" name="addressline1" class="form-control" id="address-line1" placeholder="Address line 1">
+						<span class="help-block"></span>
+						</div>
+					</div>
+					<div class="col-sm-12 col-md-6">
+						<div class="form-group">
+						<label for="address-line2" class="sr-only">Address line 2</label>
+						<input type="text" name="addressline2" class="form-control" id="address-line2" placeholder="Address line 2">
+						<span class="help-block"></span>
+						</div>
+					</div>
+					<div class="col-sm-12 col-md-6">
+						<div class="form-group">
+						<label for="state" class="sr-only">State / Region</label>
+						<input type="text" name="state" class="form-control" id="state" placeholder="State / Region">
+						<span class="help-block"></span>
+						</div>
+					</div>
+					<div class="col-sm-12 col-md-6">
+						<div class="form-group">
+						<label for="city" class="sr-only">City</label>
+						<input type="text" name="city" class="form-control" id="city" placeholder="City">
+						<span class="help-block"></span>
+						</div>
+					</div>
+					<div class="col-sm-12 col-md-6">
+						<div class="form-group">
+						<label for="country" class="sr-only">Country</label>
+						<input type="text" name="country" value="" class="form-control" id="country" placeholder="Country">
+						<span class="help-block"></span>
+						</div>
+					</div>
+					<div class="col-sm-12 col-md-6">
+						<div class="form-group">
+						<label for="zip-code" class="sr-only">Zip Code</label>
+						<input type="text" name="zipcode" class="form-control" id="zip-code" value="" placeholder="Zip code">
+						<span class="help-block"></span>
+						</div>
+					</div>
+					<div class="col-sm-12">
+						<div class="form-group">
+						<label for="requirements" class="sr-only">Special requirements</label>
+						<textarea name="requirements" class="form-control" rows="8" id="requirements" placeholder="Special requirements"></textarea>
+						<span class="help-block"></span>
+						</div>
+					</div>
+					<div class="col-sm-12">
+						<button type="submit" class="btn btn-booking">Book now</button>
+
+						<a $href="reservation/check/$roomType" class="btn btn-booking" style="margin-left: 10px;">Cancel</a>
+					</div>
+				</form> <!-- .reservation__form -->
+			</div> <!-- .reservation__form-body -->
+		</div>
+		@else
+
+		<div class="col-sm-7 col-sm-pull-5 col-md-8 col-md-pull-4">
+			<div class="reservation__form-body">
+				<p class="subheading">Booking form</p>
+				<h2 class="section__heading">Login Required</h2>
+				<p class="section__subheading">Please sign in or register to continue with your reservation.</p>
+
+				<!-- Alert message -->
+				@alert;
+
+				<form id="reservation-form_sendemail" class="reservation__form" data-animate-in="animateUp" action="@link('login?redirectTo=reservation/book/'.$roomType);" method="POST">
+					<div class="col-sm-12 col-md-6">
+						<div class="form-group">
+						<label for="email" class="sr-only">Email</label>
+						<input type="text" name="email" class="form-control" id="email" placeholder="Email" required>
+						<span class="help-block"></span>
+						</div>
+					</div>
+					<div class="col-sm-12 col-md-6">
+						<div class="form-group">
+						<label for="password" class="sr-only">Password</label>
+						<input type="password" name="password" class="form-control" id="password" placeholder="Password" required>
+						<span class="help-block"></span>
+						</div>
+					</div>
+
+					<div class="col-sm-12">
+						<button type="submit" class="btn btn-booking">Login</button>
+						<small class="btn btn-booking" style="text-transform: initial; border: none; padding: 5px; font-size: 14px;">or</small>
+						<a $href="register?redirectTo=reservation/book/$roomType" class="btn btn-booking" style="margin-left: 4px; border: none; padding-left: 0px;">Register</a>
+					</div>
+
+					<div class="col-sm-12" style="margin-top: 10px; text-align: right;">
+						<a $href="reservation/check/$roomType" style="opacity: 1; text-decoration: underline; color: #8b8b8b; text-align: center;">&times; Cancel Reservation</a>
+					</div>
+				</form>
+
+				
+			</div> <!-- .reservation__form-body -->
+		</div>
+
+		@endAuth
+	  </div> <!-- / .row -->
+	</div> <!-- / .container -->
+</section> <!-- / .section reservation -->
